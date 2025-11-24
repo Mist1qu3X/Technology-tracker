@@ -38,12 +38,28 @@ const initialTechnologies = [
 
 export const useTechnologies = () => {
   const [technologies, setTechnologies] = useState(() => {
-    const saved = localStorage.getItem('technologies');
-    return saved ? JSON.parse(saved) : initialTechnologies;
+    try {
+      const saved = localStorage.getItem('technologies');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Проверяем, что данные валидны
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+      }
+    } catch (error) {
+      console.error('Ошибка при загрузке данных из localStorage:', error);
+    }
+    return initialTechnologies;
   });
 
   useEffect(() => {
-    localStorage.setItem('technologies', JSON.stringify(technologies));
+    try {
+      localStorage.setItem('technologies', JSON.stringify(technologies));
+    } catch (error) {
+      console.error('Ошибка при сохранении в localStorage:', error);
+      // Если localStorage недоступен (например, в приватном режиме), просто игнорируем
+    }
   }, [technologies]);
 
   const addTechnology = (techData) => {

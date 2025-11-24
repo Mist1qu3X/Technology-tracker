@@ -202,13 +202,25 @@ const ApiImport = ({ onImport }) => {
     console.log('🔵 Запрос:', url);
     
     try {
+      // Проверяем, что URL валидный
+      if (!url || typeof url !== 'string' || !url.startsWith('http')) {
+        throw new Error('Неверный URL');
+      }
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 секунд таймаут
+
       const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json',
         },
+        signal: controller.signal,
+        mode: 'cors', // Явно указываем CORS
+        credentials: 'omit', // Не отправляем cookies
       });
+      
+      clearTimeout(timeoutId);
       
       console.log('📡 Статус ответа:', response.status, response.statusText);
       
@@ -222,8 +234,15 @@ const ApiImport = ({ onImport }) => {
     } catch (error) {
       console.error('❌ Ошибка загрузки:', error);
       
+      // Обработка различных типов ошибок
+      if (error.name === 'AbortError') {
+        throw new Error('CONNECTION_ERROR: Превышено время ожидания');
+      }
+      
       if (error.message.includes('Failed to fetch') || 
-          error.name === 'TypeError') {
+          error.name === 'TypeError' ||
+          error.message.includes('NetworkError') ||
+          error.message.includes('CORS')) {
         throw new Error('CONNECTION_ERROR');
       }
       throw error;
