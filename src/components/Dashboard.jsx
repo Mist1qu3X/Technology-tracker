@@ -36,7 +36,7 @@ function TabPanel({ children, value, index, ...other }) {
   );
 }
 
-const Dashboard = ({ technologies, onStatusChange, onDetailsClick }) => {
+const Dashboard = ({ technologies, onStatusChange, onDetailsClick, onDelete }) => {
   const [tabValue, setTabValue] = useState(0);
 
   // Рассчитываем статистику
@@ -206,6 +206,7 @@ const Dashboard = ({ technologies, onStatusChange, onDetailsClick }) => {
                   technology={tech}
                   onStatusChange={onStatusChange}
                   onDetailsClick={onDetailsClick}
+                  onDelete={onDelete}
                 />
               </Grid>
             ))

@@ -6,7 +6,7 @@ import { useTechnologies } from '../hooks/useTechnologies';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { technologies, updateStatus } = useTechnologies();
+  const { technologies, updateStatus, deleteTechnology } = useTechnologies();
 
   const handleStatusChange = (techId) => {
     const tech = technologies.find(t => t.id === techId);
@@ -22,12 +22,17 @@ const Dashboard = () => {
     navigate(`/technology/${techId}`);
   };
 
+  const handleDelete = (techId) => {
+    deleteTechnology(techId);
+  };
+
   return (
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
       <DashboardComponent
         technologies={technologies}
         onStatusChange={handleStatusChange}
         onDetailsClick={handleDetailsClick}
+        onDelete={handleDelete}
       />
     </Container>
   );

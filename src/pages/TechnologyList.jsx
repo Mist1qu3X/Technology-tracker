@@ -5,7 +5,7 @@ import TechnologyCard from '../components/TechnologyCard';
 import ApiImport from '../components/ApiImport';
 
 const TechnologyList = () => {
-  const { technologies, updateStatus, updateNotes, addTechnology } = useTechnologies();
+  const { technologies, updateStatus, updateNotes, addTechnology, deleteTechnology } = useTechnologies();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -101,6 +101,7 @@ const TechnologyList = () => {
             technology={tech}
             onStatusChange={updateStatus}
             onNotesChange={updateNotes}
+            onDelete={deleteTechnology}
           />
         ))}
       </div>

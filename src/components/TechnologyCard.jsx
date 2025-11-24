@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const TechnologyCard = ({ technology, onStatusChange, onNotesChange }) => {
+const TechnologyCard = ({ technology, onStatusChange, onNotesChange, onDelete }) => {
   const [showNotes, setShowNotes] = useState(false);
   const [localNotes, setLocalNotes] = useState(technology.notes || '');
   const navigate = useNavigate();
@@ -28,6 +28,12 @@ const TechnologyCard = ({ technology, onStatusChange, onNotesChange }) => {
   const handleSaveNotes = () => {
     onNotesChange(technology.id, localNotes);
     setShowNotes(false);
+  };
+
+  const handleDelete = () => {
+    if (window.confirm(`Вы уверены, что хотите удалить технологию "${technology.title}"?`)) {
+      onDelete(technology.id);
+    }
   };
 
   return (
@@ -70,6 +76,28 @@ const TechnologyCard = ({ technology, onStatusChange, onNotesChange }) => {
         >
           🔍 Подробнее
         </button>
+        
+        {onDelete && (
+          <button 
+            className="btn-danger"
+            onClick={handleDelete}
+            title="Удалить технологию"
+            style={{ 
+              padding: '8px 12px',
+              fontSize: '14px',
+              backgroundColor: '#ff6b6b',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s'
+            }}
+            onMouseOver={(e) => e.target.style.backgroundColor = '#ff5252'}
+            onMouseOut={(e) => e.target.style.backgroundColor = '#ff6b6b'}
+          >
+            🗑️ Удалить
+          </button>
+        )}
       </div>
 
       {showNotes && (

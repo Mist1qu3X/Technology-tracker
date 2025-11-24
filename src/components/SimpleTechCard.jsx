@@ -9,7 +9,7 @@ import {
   Box,
 } from '@mui/material';
 
-const SimpleTechCard = ({ technology, onStatusChange, onDetailsClick }) => {
+const SimpleTechCard = ({ technology, onStatusChange, onDetailsClick, onDelete }) => {
   // Функция для определения цвета статуса
   const getStatusColor = (status) => {
     switch (status) {
@@ -165,6 +165,21 @@ const SimpleTechCard = ({ technology, onStatusChange, onDetailsClick }) => {
           >
             🔍 Подробнее
           </Button>
+          {onDelete && (
+            <Button
+              size="small"
+              variant="outlined"
+              color="error"
+              onClick={() => {
+                if (window.confirm(`Вы уверены, что хотите удалить технологию "${technology.title}"?`)) {
+                  onDelete(technology.id);
+                }
+              }}
+              sx={{ minWidth: '100px' }}
+            >
+              🗑️ Удалить
+            </Button>
+          )}
         </Box>
       </CardActions>
     </Card>

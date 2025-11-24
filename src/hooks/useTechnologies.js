@@ -47,9 +47,12 @@ export const useTechnologies = () => {
   }, [technologies]);
 
   const addTechnology = (techData) => {
+    // Генерируем уникальный ID, используя timestamp + случайное число для избежания дубликатов
+    const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
     const newTech = {
-      id: Date.now(),
+      id: uniqueId,
       ...techData,
+      status: techData.status || 'not-started',
       createdAt: new Date().toISOString()
     };
     setTechnologies(prev => [...prev, newTech]);
