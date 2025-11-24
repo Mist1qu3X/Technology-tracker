@@ -2,12 +2,27 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTechnologies } from '../hooks/useTechnologies';
 import TechnologyCard from '../components/TechnologyCard';
+import ApiImport from '../components/ApiImport';
 
 const TechnologyList = () => {
-  const { technologies, updateStatus, updateNotes } = useTechnologies();
+  const { technologies, updateStatus, updateNotes, addTechnology } = useTechnologies();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
+
+  const handleImport = (importedTechnologies) => {
+    importedTechnologies.forEach(tech => {
+      addTechnology({
+        title: tech.title,
+        description: tech.description || '',
+        category: tech.category || 'frontend',
+        difficulty: tech.difficulty || 'beginner',
+        status: tech.status || 'not-started',
+        resources: tech.resources || [],
+        notes: tech.notes || ''
+      });
+    });
+  };
 
   const filteredTechnologies = technologies.filter(tech => {
     const matchesSearch = tech.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -30,9 +45,12 @@ const TechnologyList = () => {
     <div className="page">
       <div className="page-header">
         <h1>📚 Все технологии</h1>
-        <Link to="/add-technology" className="btn-primary">
-          ➕ Добавить технологию
-        </Link>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <ApiImport onImport={handleImport} />
+          <Link to="/add-technology" className="btn-primary">
+            ➕ Добавить технологию
+          </Link>
+        </div>
       </div>
 
       {/* Фильтры и поиск */}

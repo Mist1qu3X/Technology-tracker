@@ -38,23 +38,11 @@ const QuickActions = ({ technologies, onMarkAllCompleted, onResetAll, onImport }
       try {
         const imported = JSON.parse(e.target.result);
         
-        // Проверяем формат дорожной карты или обычного импорта
+        // Проверяем формат обычного импорта
         let technologiesToImport = [];
         
-        // Формат дорожной карты (roadmap с технологиями)
-        if (imported.roadmap && Array.isArray(imported.roadmap)) {
-          technologiesToImport = imported.roadmap.map(item => ({
-            title: item.title || item.name || 'Технология',
-            description: item.description || '',
-            category: item.category || 'frontend',
-            difficulty: item.difficulty || 'beginner',
-            status: 'not-started',
-            resources: item.resources || item.links || [],
-            notes: item.notes || ''
-          }));
-        }
         // Формат обычного импорта
-        else if (imported.technologies && Array.isArray(imported.technologies)) {
+        if (imported.technologies && Array.isArray(imported.technologies)) {
           technologiesToImport = imported.technologies;
         }
         // Прямой массив технологий
@@ -64,7 +52,7 @@ const QuickActions = ({ technologies, onMarkAllCompleted, onResetAll, onImport }
         else {
           setImportResult({
             success: false,
-            message: 'Неверный формат файла: ожидается дорожная карта (roadmap) или массив technologies'
+            message: 'Неверный формат файла: ожидается массив technologies или объект с полем technologies'
           });
           setShowImportModal(true);
           return;
@@ -130,16 +118,6 @@ const QuickActions = ({ technologies, onMarkAllCompleted, onResetAll, onImport }
             accept=".json"
             onChange={handleImport}
             style={{ display: 'none' }}
-          />
-        </label>
-        <label className="btn-info file-input-label">
-          🗺️ Импорт дорожной карты
-          <input
-            type="file"
-            accept=".json"
-            onChange={handleImport}
-            style={{ display: 'none' }}
-            title="Импортировать все технологии из дорожной карты"
           />
         </label>
       </div>
