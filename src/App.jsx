@@ -11,7 +11,7 @@ function App() {
     <ThemeProviderWrapper>
       <AuthProvider>
         <NotificationProvider>
-          <Router>
+          <Router basename={import.meta.env.BASE_URL}>
             <div 
               className="app"
               style={{
