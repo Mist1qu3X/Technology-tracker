@@ -7,21 +7,11 @@ import { NotificationProvider } from './contexts/NotificationContext';
 import './styles/App.css';
 
 function App() {
-  // Определяем base URL для GitHub Pages
-  const getBaseUrl = () => {
-    // В production используем BASE_URL из Vite, иначе '/'
-    const baseUrl = import.meta.env.BASE_URL || '/';
-    // Убеждаемся, что base URL заканчивается на '/' или пустой
-    return baseUrl === '/' ? '/' : baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
-  };
-
-  const baseUrl = getBaseUrl();
-
   return (
     <ThemeProviderWrapper>
       <AuthProvider>
         <NotificationProvider>
-          <Router basename={baseUrl}>
+          <Router basename={import.meta.env.BASE_URL}>
             <div 
               className="app"
               style={{
